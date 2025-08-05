@@ -1,0 +1,3911 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>乒乓球學費管理系統</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --accent-color: #f39c12;
+            --danger-color: #e74c3c;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --success-color: #27ae60;
+            --warning-color: #f1c40f;
+            --info-color: #3498db;
+            --private-color: #3498db;
+            --group-color: #2ecc71;
+            --competition-color: #e67e22;
+            --elite-color: #9b59b6;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --border-radius: 10px;
+            --gradient-primary: linear-gradient(135deg, #3498db, #2c3e50);
+            --gradient-secondary: linear-gradient(135deg, #2ecc71, #27ae60);
+            --gradient-accent: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+            touch-action: manipulation;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: var(--gradient-primary);
+            z-index: 2;
+        }
+        
+        h1, h2, h3, h4 {
+            color: var(--dark-color);
+            font-weight: 700;
+        }
+        
+        h1 {
+            text-align: center;
+            margin: 30px 0;
+            padding-bottom: 20px;
+            position: relative;
+            font-size: 2.2rem;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            background-color: white;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .form-section:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--gradient-primary);
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark-color);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        
+        .input-group input, 
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: #f9f9f9;
+        }
+        
+        .input-group input:focus, 
+        .input-group select:focus,
+        .input-group textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            background-color: white;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-family: 'Noto Sans TC', sans-serif;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        
+        button:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 1;
+            }
+            20% {
+                transform: scale(25, 25);
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: scale(40, 40);
+            }
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        button i {
+            margin-right: 8px;
+            font-size: 1.1rem;
+        }
+        
+        .live-preview {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            border: 2px dashed #ddd;
+            white-space: pre-wrap;
+            margin-top: 20px;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            background-color: white;
+        }
+        
+        .live-preview:hover {
+            border-color: var(--primary-color);
+        }
+        
+        .whatsapp-btn {
+            background-color: #25D366;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        .whatsapp-btn:hover {
+            background-color: #128C7E;
+        }
+        
+        .whatsapp-btn::before {
+            content: '';
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884"/></svg>');
+            margin-right: 10px;
+        }
+        
+        .copy-btn {
+            background: var(--elite-color);
+            color: white;
+        }
+        
+        .copy-btn:hover {
+            background: #8e44ad;
+        }
+        
+        .sync-btn {
+            background: var(--secondary-color);
+            color: white;
+        }
+        
+        .sync-btn:hover {
+            background: #27ae60;
+        }
+        
+        .calculate-btn {
+            background: var(--accent-color);
+            color: white;
+        }
+        
+        .calculate-btn:hover {
+            background: #e67e22;
+        }
+        
+        .guide {
+            background-color: #f0f7ff;
+            padding: 20px;
+            border-left: 4px solid var(--primary-color);
+            margin-bottom: 25px;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .guide h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 15px;
+        }
+        
+        .guide h3::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+        }
+        
+        .guide-step {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .step-number {
+            background-color: var(--primary-color);
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 25px;
+            margin-right: 15px;
+            flex-shrink: 0;
+            font-size: 0.9rem;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tab-container {
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            padding: 0 20px;
+        }
+        
+        .tab {
+            display: inline-block;
+            padding: 12px 20px;
+            background-color: #f0f0f0;
+            cursor: pointer;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tab::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary-color);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: var(--transition);
+        }
+        
+        .tab.active {
+            background-color: white;
+            color: var(--primary-color);
+            box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .tab.active::after {
+            transform: scaleX(1);
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 25px;
+            background-color: white;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .session-card {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: var(--border-radius);
+            border: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .session-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .session-info {
+            flex-grow: 1;
+        }
+        
+        .session-type {
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-right: 10px;
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .private-type { background-color: var(--private-color); }
+        .group-type { background-color: var(--group-color); }
+        .competition-type { background-color: var(--competition-color); }
+        .elite-type { background-color: var(--elite-color); }
+        
+        .remove-btn {
+            color: var(--danger-color);
+            cursor: pointer;
+            margin-left: 15px;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        
+        .remove-btn:hover {
+            background-color: #fce4e4;
+        }
+        
+        .remove-btn i {
+            margin-right: 5px;
+        }
+        
+        .time-selector {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .session-input-area {
+            background: #f0f8ff;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 25px;
+            border: 1px solid #d0e3ff;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        
+        .combined-section {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .course-input-section {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .course-list-section {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .session-counter {
+            background: var(--accent-color);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-left: 8px;
+            font-weight: bold;
+        }
+        
+        .adjustment-section {
+            margin-top: 25px;
+            padding: 20px;
+            background: #fff8e1;
+            border-radius: var(--border-radius);
+            border: 1px solid #ffe0b2;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .adjustment-list {
+            margin-top: 15px;
+        }
+        
+        .adjustment-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            background: white;
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--accent-color);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+        
+        .adjustment-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .payment-guide-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-top: 25px;
+            background: var(--competition-color);
+            color: white;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 10px rgba(230, 126, 34, 0.3);
+        }
+        
+        .payment-guide-btn:hover {
+            background: #d35400;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(230, 126, 34, 0.4);
+        }
+        
+        .payment-guide-btn i {
+            margin-right: 10px;
+        }
+        
+        .edit-text-btn {
+            background: var(--elite-color);
+            color: white;
+        }
+        
+        .edit-text-btn:hover {
+            background: #8e44ad;
+        }
+        
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .button-group button {
+            margin: 0;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .confirmation-message {
+            background-color: #dff0d8;
+            color: #3c763d;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            display: none;
+            border-left: 4px solid var(--success-color);
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .success-message {
+            background-color: #dff0d8;
+            color: #3c763d;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            display: none;
+            border-left: 4px solid var(--success-color);
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .course-type-btn {
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .course-type-btn.selected {
+            box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.5);
+            transform: scale(1.02);
+        }
+        
+        .add-btn {
+            background: var(--secondary-color);
+            margin-top: 20px;
+            color: white;
+        }
+        
+        .add-btn:hover {
+            background: #27ae60;
+        }
+        
+        .inline-message {
+            display: inline-block;
+            margin-left: 15px;
+            color: var(--success-color);
+            font-weight: bold;
+            opacity: 0;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+        
+        .inline-message.show {
+            opacity: 1;
+        }
+        
+        .invoice-info {
+            background-color: #f0f7ff;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary-color);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .invoice-info p {
+            margin: 8px 0;
+            font-size: 0.95rem;
+        }
+        
+        /* 正式學費單樣式 */
+        .formal-invoice {
+            background-color: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 25px;
+            font-family: 'Noto Sans TC', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .formal-invoice::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: var(--gradient-primary);
+        }
+        
+        .invoice-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--primary-color);
+            position: relative;
+        }
+        
+        .invoice-header h2 {
+            color: var(--dark-color);
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .invoice-header p {
+            margin: 8px 0;
+            color: #666;
+        }
+        
+        .invoice-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .invoice-detail-group {
+            flex: 1;
+            min-width: 250px;
+            padding: 0 15px;
+        }
+        
+        .invoice-detail-group h3 {
+            color: var(--primary-color);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            position: relative;
+        }
+        
+        .invoice-detail-group h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary-color);
+        }
+        
+        .invoice-detail-item {
+            display: flex;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .invoice-detail-label {
+            font-weight: bold;
+            min-width: 100px;
+            color: #555;
+            flex-shrink: 0;
+        }
+        
+        .invoice-week-section {
+            margin-bottom: 30px;
+            border: 1px solid #eee;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .week-header {
+            background-color: #f8f9fa;
+            padding: 12px 20px;
+            font-weight: bold;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to right, #f8f9fa, #e9ecef);
+        }
+        
+        .week-date-range {
+            color: #666;
+            font-weight: normal;
+            font-size: 0.9rem;
+        }
+        
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        
+        .invoice-table th {
+            background-color: #f1f8ff;
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+        
+        .invoice-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+        }
+        
+        .invoice-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .invoice-table tr:hover td {
+            background-color: #f8f9fa;
+        }
+        
+        .course-type {
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: white;
+            font-weight: 500;
+            display: inline-block;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .course-type-private { background-color: var(--private-color); }
+        .course-type-group { background-color: var(--group-color); }
+        .course-type-competition { background-color: var(--competition-color); }
+        .course-type-elite { background-color: var(--elite-color); }
+        
+        .invoice-summary {
+            margin-top: 35px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .invoice-summary h3 {
+            margin-top: 0;
+            color: var(--dark-color);
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 12px;
+            font-size: 1.3rem;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding: 8px 0;
+            border-bottom: 1px dashed #eee;
+        }
+        
+        .summary-label {
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .summary-value {
+            text-align: right;
+            font-weight: 500;
+        }
+        
+        .adjustment-list-invoice {
+            margin-top: 20px;
+            padding-left: 20px;
+        }
+        
+        .adjustment-item-invoice {
+            margin-bottom: 12px;
+            padding: 10px 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        
+        .adjustment-reason {
+            color: #666;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+        
+        .invoice-total {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid var(--primary-color);
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .total-amount {
+            font-size: 1.5rem;
+            color: var(--danger-color);
+        }
+        
+        .invoice-footer {
+            margin-top: 35px;
+            text-align: center;
+            color: #777;
+            font-size: 0.95rem;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        
+        .print-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            margin-top: 25px;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+        }
+        
+        .print-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .print-btn i {
+            margin-right: 10px;
+        }
+        
+        .save-image-btn {
+            background-color: var(--elite-color);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            margin-top: 25px;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(155, 89, 182, 0.3);
+        }
+        
+        .save-image-btn:hover {
+            background-color: #8e44ad;
+        }
+        
+        .save-image-btn i {
+            margin-right: 10px;
+        }
+        
+        .payment-methods {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .payment-method {
+            flex: 1;
+            min-width: 300px;
+            margin: 10px;
+            padding: 20px;
+            background: white;
+            border-radius: var(--border-radius);
+            border: 1px solid #ddd;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+        
+        .payment-method:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .payment-method h3 {
+            margin-top: 0;
+            color: var(--dark-color);
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .payment-method img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            margin: 15px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .payment-steps {
+            margin-top: 20px;
+            padding-left: 25px;
+            counter-reset: step;
+        }
+        
+        .payment-step {
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 35px;
+            line-height: 1.5;
+        }
+        
+        .payment-step:before {
+            content: counter(step);
+            counter-increment: step;
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: var(--primary-color);
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 25px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 請假/補堂標記 */
+        .session-status {
+            margin-left: 10px;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: inline-block;
+        }
+        
+        .status-absent {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .status-makeup {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .status-normal {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .status-selector {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .status-btn {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+        
+        .status-btn.selected {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3);
+        }
+        
+        .status-btn.absent {
+            background-color: var(--danger-color);
+            color: white;
+            border-color: #c0392b;
+        }
+        
+        .status-btn.makeup {
+            background-color: var(--success-color);
+            color: white;
+            border-color: #27ae60;
+        }
+        
+        /* 補堂選擇彈窗 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 25px;
+            border: none;
+            width: 90%;
+            max-width: 700px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: slideDown 0.4s ease;
+        }
+        
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .close {
+            color: #aaa;
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .close:hover {
+            color: #333;
+            transform: rotate(90deg);
+        }
+        
+        .makeup-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            background-color: white;
+        }
+        
+        .makeup-item {
+            padding: 12px;
+            margin-bottom: 12px;
+            background-color: #f9f9f9;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid #eee;
+        }
+        
+        .makeup-item:hover {
+            background-color: #f0f0f0;
+            transform: translateX(5px);
+        }
+        
+        .makeup-item.selected {
+            background-color: #d4edda;
+            border-left: 4px solid var(--success-color);
+            box-shadow: 0 2px 10px rgba(46, 204, 113, 0.2);
+        }
+        
+        .makeup-date {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .makeup-details {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        
+        .no-makeup {
+            text-align: center;
+            color: #777;
+            padding: 30px;
+            font-size: 1.1rem;
+        }
+        
+        /* 請假代補堂記錄區 */
+        .makeup-record-section {
+            margin-top: 35px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .makeup-record-section h3 {
+            margin-top: 0;
+            color: var(--dark-color);
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 12px;
+            font-size: 1.3rem;
+        }
+        
+        .makeup-record-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            border-left: 4px solid #6c757d;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+        
+        .makeup-record-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .makeup-record-date {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--dark-color);
+        }
+        
+        .makeup-record-details {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 8px;
+        }
+        
+        .makeup-record-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+        
+        .makeup-record-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .makeup-record-completed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        /* 未記錄請假課堂輸入區 */
+        .unrecorded-absent-section {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .unrecorded-absent-section h3 {
+            margin-top: 0;
+            color: var(--dark-color);
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 12px;
+            font-size: 1.2rem;
+        }
+        
+        .unrecorded-absent-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .unrecorded-absent-form .input-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .add-unrecorded-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .add-unrecorded-btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        /* 請假原因輸入區 */
+        .absent-reason-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: #fff8e1;
+            border-radius: var(--border-radius);
+            border: 1px solid #ffe0b2;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .absent-reason-section h4 {
+            margin-top: 0;
+            color: var(--dark-color);
+            font-size: 1.1rem;
+        }
+
+        /* 確認對話框 */
+        .confirm-dialog {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .confirm-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 30px;
+            border: none;
+            width: 90%;
+            max-width: 500px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: slideDown 0.4s ease;
+        }
+        
+        .confirm-content h3 {
+            margin-bottom: 20px;
+            color: var(--dark-color);
+            font-size: 1.3rem;
+        }
+        
+        .confirm-buttons {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .confirm-buttons button {
+            padding: 10px 25px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .confirm-yes {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .confirm-yes:hover {
+            background-color: #219653;
+        }
+        
+        .confirm-no {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .confirm-no:hover {
+            background-color: #c0392b;
+        }
+        
+        /* 暫存課程列表 */
+        .pending-sessions-list {
+            margin-top: 25px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            background-color: #f8f9fa;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .pending-session-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--primary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+        
+        .pending-session-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .pending-session-info {
+            flex-grow: 1;
+        }
+        
+        .pending-session-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .confirm-sessions-btn {
+            background-color: var(--success-color);
+            color: white;
+            margin-top: 20px;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        .confirm-sessions-btn:hover {
+            background-color: #219653;
+        }
+        
+        /* Excel 輸出區 */
+        .excel-output-section {
+            margin-top: 35px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .excel-output-section h3 {
+            margin-top: 0;
+            color: var(--dark-color);
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 12px;
+            font-size: 1.3rem;
+        }
+        
+        .excel-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.95rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .excel-table th {
+            background-color: #f1f8ff;
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+        
+        .excel-table td {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+            background-color: white;
+        }
+        
+        .excel-table tr:hover td {
+            background-color: #f8f9fa;
+        }
+        
+        .excel-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .excel-copy-btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .excel-copy-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .excel-download-btn {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .excel-download-btn:hover {
+            background-color: #27ae60;
+        }
+        
+        .excel-copy-no-header-btn {
+            background-color: var(--elite-color);
+            color: white;
+        }
+        
+        .excel-copy-no-header-btn:hover {
+            background-color: #8e44ad;
+        }
+        
+        /* 圖片保存提示 */
+        .image-save-notification {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background-color: var(--success-color);
+            color: white;
+            padding: 15px 25px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 25px rgba(39, 174, 96, 0.3);
+            z-index: 1001;
+            display: none;
+            animation: slideInRight 0.5s ease;
+            max-width: 350px;
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* 安全防護措施 */
+        .security-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .security-message {
+            max-width: 600px;
+            background-color: var(--danger-color);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .security-message i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+            color: white;
+        }
+        
+        /* 動畫效果 */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        /* 響應式設計 */
+        @media (max-width: 992px) {
+            .invoice-details {
+                flex-direction: column;
+            }
+            
+            .invoice-detail-group {
+                margin-bottom: 25px;
+                padding: 0;
+            }
+            
+            .payment-methods {
+                flex-direction: column;
+            }
+            
+            .payment-method {
+                min-width: 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                margin: 10px auto;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+                margin: 20px 0;
+            }
+            
+            .form-section {
+                padding: 20px;
+            }
+            
+            .tab {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+                flex: 1;
+                min-width: 120px;
+                text-align: center;
+            }
+            
+            button {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            
+            .button-group button {
+                min-width: 100%;
+            }
+            
+            .time-selector {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .combined-section {
+                flex-direction: column;
+            }
+            
+            .invoice-table {
+                font-size: 0.85rem;
+            }
+            
+            .invoice-table th, .invoice-table td {
+                padding: 8px 10px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 20% auto;
+                padding: 20px;
+            }
+            
+            .confirm-content {
+                width: 95%;
+                margin: 30% auto;
+            }
+            
+            .confirm-buttons {
+                flex-direction: column;
+            }
+            
+            .confirm-buttons button {
+                width: 100%;
+            }
+            
+            .pending-session-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .pending-session-actions {
+                margin-top: 15px;
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .excel-actions {
+                flex-direction: column;
+            }
+            
+            .excel-actions button {
+                width: 100%;
+            }
+            
+            .image-save-notification {
+                top: 15px;
+                right: 15px;
+                left: 15px;
+                max-width: none;
+                width: auto;
+            }
+        }
+        
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+                font-size: 12pt;
+            }
+            
+            .container {
+                box-shadow: none;
+                padding: 0;
+                margin: 0;
+                max-width: 100%;
+            }
+            
+            .tab-container, .guide, button, .excel-output-section {
+                display: none !important;
+            }
+            
+            .tab-content {
+                display: block !important;
+                border: none;
+                padding: 0;
+            }
+            
+            .formal-invoice {
+                box-shadow: none;
+                padding: 0;
+            }
+            
+            .invoice-header {
+                margin-bottom: 10mm;
+            }
+            
+            .invoice-table {
+                page-break-inside: avoid;
+            }
+            
+            .invoice-summary {
+                page-break-inside: avoid;
+            }
+            
+            .print-btn, .save-image-btn {
+                display: none;
+            }
+            
+            .payment-methods {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 安全防護措施 -->
+    <div id="securityOverlay" class="security-overlay" style="display: none;">
+        <div class="security-message">
+            <i class="fas fa-lock"></i>
+            <h2>系統保護提示</h2>
+            <p>此系統受版權保護，未經授權禁止保存、複製或修改。所有內容僅供授權用戶使用。</p>
+            <p>請聯繫系統管理員以獲取合法使用權限。</p>
+            <button onclick="hideSecurityMessage()" style="margin-top: 20px; background: white; color: var(--danger-color);">我明白了，繼續使用</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- 圖片保存成功提示 -->
+        <div class="image-save-notification" id="imageSaveNotification">
+            <i class="fas fa-check-circle"></i> 學費單圖片已保存到您的設備！
+        </div>
+        
+        <h1><i class="fas fa-table-tennis"></i> 乒乓球學費管理系統</h1>
+        
+        <!-- 使用指南 -->
+        <div class="guide">
+            <h3>使用指南</h3>
+            <div class="guide-step">
+                <div class="step-number">1</div>
+                <div>在「基本資料」標籤填寫學員和教練基本資訊</div>
+            </div>
+            <div class="guide-step">
+                <div class="step-number">2</div>
+                <div>在「課程設置」標籤添加並設置課程時間和類型</div>
+            </div>
+            <div class="guide-step">
+                <div class="step-number">3</div>
+                <div>在「學費調整」標籤添加任何學費調整（如優惠、補課等）</div>
+            </div>
+            <div class="guide-step">
+                <div class="step-number">4</div>
+                <div>在「WhatsApp版學費單」標籤查看並分享簡化學費單</div>
+            </div>
+            <div class="guide-step">
+                <div class="step-number">5</div>
+                <div>在「正式學費單」標籤查看並打印詳細學費單</div>
+            </div>
+            <div class="guide-step">
+                <div class="step-number">6</div>
+                <div>在「Excel輸出」標籤查看並複製課程資料到Excel</div>
+            </div>
+        </div>
+
+        <!-- 標籤導航 -->
+        <div class="tab-container">
+            <div class="tab active" onclick="openTab('info-tab')"><i class="fas fa-user"></i> 基本資料</div>
+            <div class="tab" onclick="openTab('course-tab')"><i class="fas fa-calendar-alt"></i> 課程設置</div>
+            <div class="tab" onclick="openTab('adjustment-tab')"><i class="fas fa-adjust"></i> 學費調整</div>
+            <div class="tab" onclick="openTab('invoice-tab')"><i class="fab fa-whatsapp"></i> WhatsApp版</div>
+            <div class="tab" onclick="openTab('formal-invoice-tab')"><i class="fas fa-file-invoice"></i> 正式學費單</div>
+            <div class="tab" onclick="openTab('excel-tab')"><i class="fas fa-file-excel"></i> Excel輸出</div>
+        </div>
+
+        <!-- 基本資料輸入區 -->
+        <div id="info-tab" class="tab-content active">
+            <div class="form-section">
+                <h2><i class="fas fa-user"></i> 基本資料</h2>
+                <div class="guide" style="margin-bottom: 15px;">
+                    <p>請填寫學員和教練的基本資訊，這些信息將顯示在學費單上。</p>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-user-graduate"></i> 學員姓名：</label>
+                    <input type="text" id="studentName" placeholder="輸入學員姓名">
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-school"></i> 所屬機構：</label>
+                    <select id="institution">
+                        <option value="">請選擇機構</option>
+                        <option value="乒乓匯智大圍總校">乒乓匯智大圍總校</option>
+                        <option value="乒乓匯智柯士甸分校">乒乓匯智柯士甸分校</option>
+                        <option value="乒乓匯智荃灣分校">乒乓匯智荃灣分校</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-user-tie"></i> 負責教練：</label>
+                    <input type="text" id="coachName" placeholder="輸入教練姓名">
+                </div>
+                <div class="invoice-info">
+                    <p><strong><i class="fas fa-info-circle"></i> 系統自動記錄開單資訊：</strong></p>
+                    <p><i class="far fa-calendar-alt"></i> 開單日期：<span id="invoiceDateDisplay"></span></p>
+                    <p><i class="far fa-clock"></i> 開單時間：<span id="invoiceTimeDisplay"></span></p>
+                </div>
+            </div>
+            
+            <div style="text-align: right;">
+                <button onclick="openTab('course-tab')">下一步：課程設置 <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <!-- 課程設置區 -->
+        <div id="course-tab" class="tab-content">
+            <div class="form-section">
+                <h2><i class="fas fa-calendar-alt"></i> 課程設置</h2>
+                <div class="guide" style="margin-bottom: 15px;">
+                    <p>請選擇課程日期、時間和類型，然後點擊對應的課程類型按鈕添加課程。</p>
+                    <p>系統會自動根據不同課程類型計算學費：</p>
+                    <ul>
+                        <li>私人/專才課程：按小時計算</li>
+                        <li>小組班：每堂1.5小時</li>
+                        <li>比賽班：每堂2.5小時</li>
+                    </ul>
+                    <p><strong>重要提示：</strong>補堂課程需要獨立處理，不能與正常課程或請假課程一同添加。</p>
+                </div>
+                
+                <div class="session-input-area">
+                    <div class="input-group">
+                        <label><i class="far fa-calendar"></i> 日期：</label>
+                        <input type="date" id="sessionDate">
+                    </div>
+                    <div class="input-group">
+                        <label><i class="far fa-clock"></i> 開始時間：</label>
+                        <div class="time-selector">
+                            <select id="startBlock" onchange="updateTimeOptions('start')">
+                                <option value="">選擇時段</option>
+                                <option value="morning">上午 (8:00-12:00)</option>
+                                <option value="noon">中午 (12:00-15:00)</option>
+                                <option value="afternoon">下午 (15:00-18:00)</option>
+                                <option value="evening">晚上 (18:00-23:00)</option>
+                            </select>
+                            <select id="startTime">
+                                <option value="">請先選擇時段</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label><i class="far fa-clock"></i> 結束時間：</label>
+                        <div class="time-selector">
+                            <select id="endBlock" onchange="updateTimeOptions('end')">
+                                <option value="">選擇時段</option>
+                                <option value="morning">上午 (8:00-12:00)</option>
+                                <option value="noon">中午 (12:00-15:00)</option>
+                                <option value="afternoon">下午 (15:00-18:00)</option>
+                                <option value="evening">晚上 (18:00-23:00)</option>
+                            </select>
+                            <select id="endTime">
+                                <option value="">請先選擇時段</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label><i class="fas fa-tag"></i> 課程類型：</label>
+                        <div class="button-group">
+                            <button class="course-type-btn private-type" onclick="selectCourseType('private')"><i class="fas fa-user"></i> 私人課程</button>
+                            <button class="course-type-btn group-type" onclick="selectCourseType('group')"><i class="fas fa-users"></i> 小組班</button>
+                            <button class="course-type-btn competition-type" onclick="selectCourseType('competition')"><i class="fas fa-trophy"></i> 比賽班</button>
+                            <button class="course-type-btn elite-type" onclick="selectCourseType('elite')"><i class="fas fa-star"></i> 專才教練</button>
+                        </div>
+                        <div class="input-group">
+                            <label><i class="fas fa-info-circle"></i> 課程狀態：</label>
+                            <div class="status-selector">
+                                <button class="status-btn selected" onclick="selectSessionStatus('normal')"><i class="fas fa-check"></i> 正常課程</button>
+                                <button class="status-btn absent" onclick="selectSessionStatus('absent')"><i class="fas fa-user-slash"></i> 請假</button>
+                                <button class="status-btn makeup" onclick="selectSessionStatus('makeup')"><i class="fas fa-exchange-alt"></i> 補堂</button>
+                            </div>
+                        </div>
+                        <div id="absentReasonSection" class="absent-reason-section" style="display: none;">
+                            <h4><i class="fas fa-comment-alt"></i> 請假原因</h4>
+                            <textarea id="absentReason" placeholder="請輸入請假原因（例如：病假、事假等）"></textarea>
+                        </div>
+                        <div style="margin-top: 15px;">
+                            <button id="addSessionBtn" class="add-btn" onclick="addPendingSession()" disabled><i class="fas fa-plus"></i> 新增暫存課程</button>
+                            <span id="addSuccessMessage" class="inline-message">課程已暫存！</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 暫存課程列表 -->
+                <div class="pending-sessions-list" id="pendingSessionsList">
+                    <h3><i class="fas fa-clock"></i> 暫存課程 <span class="session-counter" id="pendingSessionCount">0</span></h3>
+                    <div class="guide" style="margin-bottom: 15px;">
+                        <p>以下是您已添加但尚未確認的課程，請檢查無誤後點擊「確認添加課程」按鈕。</p>
+                        <p><strong>注意：</strong>補堂課程需要獨立處理，不能與正常課程或請假課程一同添加。</p>
+                    </div>
+                    <div id="pendingSessionsContainer"></div>
+                    <button class="confirm-sessions-btn" onclick="confirmPendingSessions()"><i class="fas fa-check"></i> 確認添加課程</button>
+                </div>
+
+                <div class="session-list" id="sessionList">
+                    <h3><i class="fas fa-list"></i> 已添加課程 <span class="session-counter" id="sessionCount">0</span></h3>
+                    <div class="guide" style="margin-bottom: 15px;">
+                        <p>已添加的課程會顯示在這裡，可以點擊「刪除」按鈕移除錯誤的課程。</p>
+                        <p>請注意：請假課堂不會顯示在此列表中，而是記錄在學費單的「請假待補堂記錄」部分。</p>
+                    </div>
+                    <div id="allSessions"></div>
+                </div>
+                
+                <div id="courseAddedMessage" class="success-message">
+                    <i class="fas fa-check-circle"></i> 課程已成功添加！您可以繼續添加更多課程或點擊「計算學費」按鈕繼續。
+                </div>
+                
+                <div id="calculationConfirmation" class="confirmation-message">
+                    <i class="fas fa-check-circle"></i> 學費計算已完成！請前往「學費調整」標籤繼續流程。
+                </div>
+                
+                <button class="calculate-btn" onclick="calculateFee()"><i class="fas fa-calculator"></i> 計算學費</button>
+            </div>
+            
+            <div style="text-align: right;">
+                <button onclick="openTab('info-tab')"><i class="fas fa-arrow-left"></i> 上一步：基本資料</button>
+                <button onclick="openTab('adjustment-tab')">下一步：學費調整 <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <!-- 學費調整區 -->
+        <div id="adjustment-tab" class="tab-content">
+            <div class="form-section">
+                <h2><i class="fas fa-adjust"></i> 學費調整</h2>
+                <div class="guide" style="margin-bottom: 15px;">
+                    <p>如需調整學費（如優惠、補課等），請在此添加調整項目。</p>
+                    <p>正數金額會增加總學費，負數金額會減少總學費。</p>
+                    <p><strong>注意：</strong>即使沒有添加任何課程，也可以在此添加調整項目。</p>
+                </div>
+                
+                <div id="adjustmentSection">
+                    <div class="input-group">
+                        <label><i class="fas fa-money-bill-wave"></i> 調整金額：</label>
+                        <input type="number" id="adjustmentAmount" placeholder="輸入調整金額" step="1" min="-9999" max="9999">
+                        <span style="font-size: 0.9rem; color: #666;">正數為增加，負數為減少</span>
+                    </div>
+                    <div class="input-group">
+                        <label><i class="fas fa-comment-alt"></i> 調整原因：</label>
+                        <textarea id="adjustmentReason" placeholder="輸入調整原因（例如：補課、優惠折扣等）"></textarea>
+                    </div>
+                    <button onclick="addAdjustment()"><i class="fas fa-plus"></i> 新增調整</button>
+                    
+                    <div id="adjustmentAddedMessage" class="success-message">
+                        <i class="fas fa-check-circle"></i> 調整項目已成功添加！您可以繼續添加更多調整或點擊「生成學費單」按鈕繼續。
+                    </div>
+                    
+                    <div class="adjustment-list" id="adjustmentList"></div>
+                </div>
+                
+                <div id="invoiceGeneratedMessage" class="confirmation-message">
+                    <i class="fas fa-check-circle"></i> 學費單已成功生成！請前往「WhatsApp版學費單」或「正式學費單」標籤查看完整內容。
+                </div>
+                
+                <button class="generate-btn" onclick="generatePreview()"><i class="fas fa-file-alt"></i> 生成學費單</button>
+            </div>
+            
+            <div style="text-align: right;">
+                <button onclick="openTab('course-tab')"><i class="fas fa-arrow-left"></i> 上一步：課程設置</button>
+                <button onclick="openTab('invoice-tab')">下一步：WhatsApp版學費單 <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <!-- WhatsApp版學費單生成區 -->
+        <div id="invoice-tab" class="tab-content">
+            <div class="form-section">
+                <h2><i class="fab fa-whatsapp"></i> WhatsApp版學費單</h2>
+                <div class="guide" style="margin-bottom: 15px;">
+                    <p>生成的學費單會顯示在這裡，您可以：</p>
+                    <ul>
+                        <li>複製文案到剪貼簿</li>
+                        <li>直接發送至WhatsApp</li>
+                        <li>編輯文案內容</li>
+                        <li>查看繳費流程教學</li>
+                    </ul>
+                </div>
+                
+                <div class="button-group">
+                    <button onclick="generatePreview()" class="sync-btn"><i class="fas fa-sync-alt"></i> 更新學費單</button>
+                    <button onclick="copyText()" class="copy-btn"><i class="fas fa-copy"></i> 複製文案</button>
+                    <button onclick="editPreviewText()" class="edit-text-btn"><i class="fas fa-edit"></i> 文案調整</button>
+                </div>
+                
+                <div id="livePreview" class="live-preview">請先新增課程或學費調整，然後點擊「生成學費單」按鈕</div>
+                
+                <button id="paymentGuideBtn" class="payment-guide-btn" onclick="openPaymentGuide()">
+                    <i class="fas fa-file-alt"></i> 學費繳付流程教學
+                </button>
+                
+                <button class="whatsapp-btn" onclick="sendWhatsApp()"><i class="fab fa-whatsapp"></i> 發送至WhatsApp</button>
+            </div>
+            
+            <div style="text-align: right;">
+                <button onclick="openTab('adjustment-tab')"><i class="fas fa-arrow-left"></i> 上一步：學費調整</button>
+                <button onclick="openTab('formal-invoice-tab')">下一步：正式學費單 <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <!-- 正式學費單生成區 -->
+        <div id="formal-invoice-tab" class="tab-content">
+            <div class="form-section">
+                <h2><i class="fas fa-file-invoice"></i> 正式學費單</h2>
+                <div class="guide" style="margin-bottom: 15px;">
+                    <p>這是詳細的正式學費單，包含所有課程明細和學費計算。</p>
+                    <p>您可以打印此學費單或保存為圖片。</p>
+                </div>
+                
+                <div class="button-group">
+                    <button onclick="generateFormalInvoice()" class="sync-btn"><i class="fas fa-sync-alt"></i> 更新學費單</button>
+                    <button onclick="window.print()" class="print-btn"><i class="fas fa-print"></i> 打印學費單</button>
+                    <button onclick="saveInvoiceAsImage()" class="save-image-btn"><i class="fas fa-camera"></i> 保存為圖片</button>
+                </div>
+                
+                <div id="formalInvoiceContainer" class="formal-invoice">
+                    <div class="invoice-header">
+                        <h2 id="formalInvoiceTitle">乒乓球課程學費單</h2>
+                    </div>
+                    
+                    <div class="invoice-details">
+                        <div class="invoice-detail-group">
+                            <h3><i class="fas fa-user-graduate"></i> 學員資訊</h3>
+                            <div class="invoice-detail-item">
+                                <span class="invoice-detail-label">學員姓名：</span>
+                                <span id="formalStudentName">未填寫</span>
+                            </div>
+                            <div class="invoice-detail-item">
+                                <span class="invoice-detail-label">所屬機構：</span>
+                                <span id="formalInstitution">未填寫</span>
+                            </div>
+                            <div class="invoice-detail-item">
+                                <span class="invoice-detail-label">負責教練：</span>
+                                <span id="formalCoachName">未填寫</span>
+                            </div>
+                        </div>
+                        
+                        <div class="invoice-detail-group">
+                            <h3><i class="fas fa-file-invoice"></i> 學費單資訊</h3>
+                            <div class="invoice-detail-item">
+                                <span class="invoice-detail-label">開單日期：</span>
+                                <span id="formalInvoiceDate">未生成</span>
+                            </div>
+                            <div class="invoice-detail-item">
+                                <span class="invoice-detail-label">開單時間：</span>
+                                <span id="formalInvoiceTime">未生成</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="formalInvoiceContent">
+                        <p style="text-align: center; color: #777;">請先新增課程或學費調整，然後點擊「生成學費單」按鈕</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: right;">
+                <button onclick="openTab('invoice-tab')"><i class="fas fa-arrow-left"></i> 上一步：WhatsApp版學費單</button>
+                <button onclick="openTab('excel-tab')">下一步：Excel輸出 <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <!-- Excel輸出區 -->
+        <div id="excel-tab" class="tab-content">
+            <div class="form-section">
+                <h2><i class="fas fa-file-excel"></i> Excel輸出</h2>
+                <div class="guide" style="margin-bottom: 15px;">
+                    <p>此區域顯示適合複製到Excel的課程資料，方便教練填寫糧單。</p>
+                    <p>資料已按日期排序，並包含所有必要資訊。</p>
+                </div>
+                
+                <div class="excel-output-section">
+                    <h3><i class="fas fa-table"></i> 課程資料表 <span class="session-counter" id="excelSessionCount">0</span></h3>
+                    <div class="guide" style="margin-bottom: 15px;">
+                        <p>以下是所有已添加的課程資料，按日期排序，可直接複製到Excel使用。</p>
+                        <p>請注意：請假課堂不會顯示在此列表中。</p>
+                    </div>
+                    
+                    <div id="excelTableContainer">
+                        <table class="excel-table" id="excelTable">
+                            <thead>
+                                <tr>
+                                    <th><i class="far fa-calendar-alt"></i> 日期</th>
+                                    <th><i class="far fa-calendar-check"></i> 星期</th>
+                                    <th><i class="far fa-clock"></i> 時間</th>
+                                    <th><i class="fas fa-hourglass-half"></i> 課堂時長（小時）</th>
+                                    <th><i class="fas fa-user-tie"></i> 教練姓名</th>
+                                    <th><i class="fas fa-user-graduate"></i> 學生姓名</th>
+                                </tr>
+                            </thead>
+                            <tbody id="excelTableBody">
+                                <tr>
+                                    <td colspan="6" style="text-align: center; color: #777;">請先新增課程，然後點擊「更新Excel表格」按鈕</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="excel-actions">
+                        <button onclick="updateExcelTable()" class="sync-btn excel-copy-btn"><i class="fas fa-sync-alt"></i> 更新Excel表格</button>
+                        <button onclick="copyExcelDataWithHeaders()" class="excel-copy-btn"><i class="fas fa-copy"></i> 複製完整表格</button>
+                        <button onclick="copyExcelDataWithoutHeaders()" class="excel-copy-no-header-btn"><i class="fas fa-copy"></i> 複製表格內容</button>
+                        <button onclick="downloadExcelData()" class="excel-download-btn"><i class="fas fa-file-excel"></i> 下載CSV文件</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: right;">
+                <button onclick="openTab('formal-invoice-tab')"><i class="fas fa-arrow-left"></i> 上一步：正式學費單</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 補堂選擇模態框 -->
+    <div id="makeupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeMakeupModal()">&times;</span>
+            <h2><i class="fas fa-exchange-alt"></i> 選擇要補的請假課堂</h2>
+            <p>請從以下請假課堂中選擇要補堂的課程：</p>
+            
+            <div class="makeup-list" id="makeupList">
+                <!-- 請假課堂列表將在這裡動態生成 -->
+            </div>
+            
+            <div id="noMakeupSessions" class="no-makeup" style="display: none;">
+                <p><i class="fas fa-info-circle"></i> 暫無可補的請假課堂</p>
+            </div>
+            
+            <!-- 未記錄請假課堂輸入區 -->
+            <div class="unrecorded-absent-section">
+                <h3><i class="fas fa-plus-circle"></i> 未記錄的請假課堂</h3>
+                <p>如要補堂的請假課堂不在上方列表中，請在此輸入：</p>
+                <div class="unrecorded-absent-form">
+                    <div class="input-group">
+                        <label><i class="far fa-calendar"></i> 日期：</label>
+                        <input type="date" id="unrecordedAbsentDate">
+                    </div>
+                    <div class="input-group">
+                        <label><i class="far fa-clock"></i> 開始時間：</label>
+                        <input type="time" id="unrecordedAbsentStart">
+                    </div>
+                    <div class="input-group">
+                        <label><i class="far fa-clock"></i> 結束時間：</label>
+                        <input type="time" id="unrecordedAbsentEnd">
+                    </div>
+                    <div class="input-group">
+                        <label><i class="fas fa-tag"></i> 課程類型：</label>
+                        <select id="unrecordedAbsentType">
+                            <option value="private">私人課程</option>
+                            <option value="group">小組班</option>
+                            <option value="competition">比賽班</option>
+                            <option value="elite">專才教練</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label><i class="fas fa-comment-alt"></i> 請假原因：</label>
+                    <textarea id="unrecordedAbsentReason" placeholder="請輸入請假原因"></textarea>
+                </div>
+                <button class="add-unrecorded-btn" onclick="addUnrecordedAbsent()"><i class="fas fa-plus"></i> 添加未記錄請假課堂</button>
+            </div>
+            
+            <button onclick="confirmMakeupSelection()" style="margin-top: 20px; width: 100%;"><i class="fas fa-check"></i> 確認選擇</button>
+        </div>
+    </div>
+
+    <!-- 確認對話框 -->
+    <div id="confirmDialog" class="confirm-dialog">
+        <div class="confirm-content">
+            <h3><i class="fas fa-question-circle"></i> 確認新增課程</h3>
+            <p id="confirmSessionDetails"></p>
+            <div class="confirm-buttons">
+                <button class="confirm-yes" onclick="confirmAddSession(true)"><i class="fas fa-check"></i> 確認</button>
+                <button class="confirm-no" onclick="confirmAddSession(false)"><i class="fas fa-times"></i> 取消</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 課程配置
+        const courseConfig = {
+            private: { 
+                type: '私人課程', 
+                emoji: '🏓', 
+                rate: 380,
+                unit: '小時',
+                calculateByHour: true,
+                oldType: '➖➖1️⃣私人單對單課程🏓➖➖',
+                classType: 'course-type-private'
+            },
+            group: { 
+                type: '小組班', 
+                emoji: '🏓', 
+                rate: 315,
+                unit: '堂',
+                durationPerClass: 1.5,
+                calculateByHour: false,
+                oldType: '➖➖2️⃣小組班課程🏓➖➖',
+                classType: 'course-type-group'
+            },
+            competition: { 
+                type: '比賽班', 
+                emoji: '🏓', 
+                rate: 330,
+                unit: '堂',
+                durationPerClass: 2.5,
+                calculateByHour: false,
+                oldType: '➖➖3️⃣比賽班課程🏓➖➖',
+                classType: 'course-type-competition'
+            },
+            elite: { 
+                type: '專才教練', 
+                emoji: '🏓', 
+                rate: 500,
+                unit: '小時',
+                calculateByHour: true,
+                oldType: '➖➖4️⃣專才教練訓練課程🏓➖➖',
+                classType: 'course-type-elite'
+            }
+        };
+
+        // 時間段配置
+        const timeBlocks = {
+            morning: { start: 8, end: 12, label: '上午 (8:00-12:00)' },
+            noon: { start: 12, end: 15, label: '中午 (12:00-15:00)' },
+            afternoon: { start: 15, end: 18, label: '下午 (15:00-18:00)' },
+            evening: { start: 18, end: 23, label: '晚上 (18:00-23:00)' }
+        };
+
+        let allSessions = [];
+        let pendingSessions = []; // 暫存課程列表
+        let currentTotalFee = 0;
+        let adjustments = [];
+        let originalPreviewText = '';
+        let selectedCourseType = null;
+        let selectedSessionStatus = 'normal';
+        let selectedAbsentSession = null;
+        let makeupSessions = [];
+        let pendingMakeupRecords = [];
+        let pendingSession = null;
+
+        // 標籤切換功能
+        function openTab(tabId) {
+            // 隱藏所有標籤內容
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // 移除所有標籤的active類
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // 顯示選中的標籤內容
+            document.getElementById(tabId).classList.add('active');
+            
+            // 為選中的標籤添加active類
+            event.currentTarget.classList.add('active');
+            
+            // 如果是正式學費單標籤，則自動生成學費單
+            if (tabId === 'formal-invoice-tab') {
+                generateFormalInvoice();
+            }
+            
+            // 如果是WhatsApp學費單標籤，則自動更新預覽
+            if (tabId === 'invoice-tab') {
+                generatePreview();
+            }
+            
+            // 如果是Excel標籤，則自動更新表格
+            if (tabId === 'excel-tab') {
+                updateExcelTable();
+            }
+        }
+
+        // 更新時間選項
+        function updateTimeOptions(type) {
+            const blockSelect = document.getElementById(`${type}Block`);
+            const timeSelect = document.getElementById(`${type}Time`);
+            const block = blockSelect.value;
+            
+            timeSelect.innerHTML = '<option value="">選擇時間</option>';
+            
+            if (block && timeBlocks[block]) {
+                for (let hour = timeBlocks[block].start; hour <= timeBlocks[block].end; hour++) {
+                    for (let minute = 0; minute < 60; minute += 15) {
+                        // 檢查是否超過結束時間
+                        if (hour === timeBlocks[block].end && minute > 0) break;
+                        
+                        const time = `${String(hour).padStart(2, '0')}${String(minute).padStart(2, '0')}`;
+                        const displayTime = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+                        const option = document.createElement('option');
+                        option.value = time;
+                        option.textContent = displayTime;
+                        timeSelect.appendChild(option);
+                    }
+                }
+            }
+        }
+
+        function calculateDuration(start, end) {
+            if (!start || !end) return 0;
+            
+            const startHour = parseInt(start.substring(0, 2));
+            const startMinute = parseInt(start.substring(2));
+            const endHour = parseInt(end.substring(0, 2));
+            const endMinute = parseInt(end.substring(2));
+            
+            const startTotal = startHour * 60 + startMinute;
+            const endTotal = endHour * 60 + endMinute;
+            
+            return (endTotal - startTotal) / 60; // 轉換為小時
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            const days = ['日', '一', '二', '三', '四', '五', '六'];
+            const dayOfWeek = days[date.getDay()];
+            return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}（週${dayOfWeek}）`;
+        }
+
+        function formatSimpleDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        }
+
+        function formatTime(timeString) {
+            if (!timeString) return '';
+            return `${timeString.substring(0, 2)}:${timeString.substring(2)}`;
+        }
+
+        function formatDateTime(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${year}-${month}-${day} ${hours}:${minutes}`;
+        }
+
+        function formatDuration(duration) {
+            if (duration <= 0) return '0小時';
+            
+            const hours = Math.floor(duration);
+            const minutes = Math.round((duration % 1) * 60);
+            
+            if (minutes === 0) {
+                return `${hours}小時`;
+            } else {
+                return `${hours}小時${minutes}分鐘`;
+            }
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('zh-HK', { style: 'currency', currency: 'HKD' }).format(amount)
+                .replace('HK$', '$')
+                .replace(/(\.\d+)?$/, '');
+        }
+
+        function getMonthRangeFromSessions() {
+            if (allSessions.length === 0) {
+                const now = new Date();
+                return `${now.getMonth() + 1}月`;
+            }
+            
+            // 找出最早和最晚的課程日期
+            let earliestDate = null;
+            let latestDate = null;
+            
+            allSessions.forEach(session => {
+                const sessionDate = new Date(session.date);
+                if (!earliestDate || sessionDate < earliestDate) {
+                    earliestDate = sessionDate;
+                }
+                if (!latestDate || sessionDate > latestDate) {
+                    latestDate = sessionDate;
+                }
+            });
+            
+            const startMonth = earliestDate.getMonth() + 1;
+            const endMonth = latestDate.getMonth() + 1;
+            
+            if (startMonth === endMonth) {
+                return `${startMonth}月`;
+            } else {
+                return `${startMonth}至${endMonth}月`;
+            }
+        }
+
+        function sortSessionsByDate(sessions) {
+            return sessions.sort((a, b) => {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+                return dateA - dateB;
+            });
+        }
+
+        function groupSessionsByWeek(sessions) {
+            if (sessions.length === 0) return [];
+            
+            // 先按日期排序
+            const sortedSessions = sortSessionsByDate([...sessions]);
+            
+            const weeks = [];
+            let currentWeek = null;
+            
+            sortedSessions.forEach(session => {
+                // 跳過請假課堂，它們不會顯示在每周記錄中
+                if (session.status === 'absent') return;
+                
+                const sessionDate = new Date(session.date);
+                const sessionYear = sessionDate.getFullYear();
+                const sessionMonth = sessionDate.getMonth();
+                const sessionDay = sessionDate.getDate();
+                const sessionDayOfWeek = sessionDate.getDay(); // 0 = Sunday, 1 = Monday, etc.
+                
+                // 計算該日期所在周的周一日期
+                const monday = new Date(sessionDate);
+                monday.setDate(sessionDay - (sessionDayOfWeek === 0 ? 6 : sessionDayOfWeek - 1));
+                
+                const mondayStr = formatSimpleDate(monday);
+                
+                if (!currentWeek || currentWeek.monday !== mondayStr) {
+                    // 計算該周的周日日期
+                    const sunday = new Date(monday);
+                    sunday.setDate(monday.getDate() + 6);
+                    const sundayStr = formatSimpleDate(sunday);
+                    
+                    currentWeek = {
+                        monday: mondayStr,
+                        sunday: sundayStr,
+                        sessions: []
+                    };
+                    weeks.push(currentWeek);
+                }
+                
+                currentWeek.sessions.push(session);
+            });
+            
+            return weeks;
+        }
+
+        function calculateTypeSummary(sessions) {
+            const summary = {
+                private: { count: 0, hours: 0, fee: 0 },
+                group: { count: 0, hours: 0, fee: 0 },
+                competition: { count: 0, hours: 0, fee: 0 },
+                elite: { count: 0, hours: 0, fee: 0 }
+            };
+            
+            sessions.forEach(session => {
+                // 只計算正常課程和補堂（補堂不計費）
+                if (session.status === 'absent') return;
+                
+                const config = courseConfig[session.type];
+                
+                if (config.calculateByHour) {
+                    // 私人課程和專才教練課程按小時計算
+                    summary[session.type].hours += session.duration;
+                    // 補堂不計費
+                    if (session.status !== 'makeup') {
+                        summary[session.type].fee += session.duration * config.rate;
+                    }
+                } else {
+                    // 小組班和比賽班課程按堂數計算
+                    const classes = session.duration / config.durationPerClass;
+                    const roundedClasses = Math.ceil(classes);
+                    fee = roundedClasses * config.rate;
+                    summary[session.type].fee += fee;
+                    summary[session.type].count += roundedClasses;
+                }
+            });
+            
+            return summary;
+        }
+
+        function updateInvoiceDateTime() {
+            const now = new Date();
+            const dateStr = formatSimpleDate(now);
+            const timeStr = formatTime(
+                String(now.getHours()).padStart(2, '0') + 
+                String(now.getMinutes()).padStart(2, '0')
+            );
+            
+            document.getElementById('invoiceDateDisplay').textContent = dateStr;
+            document.getElementById('invoiceTimeDisplay').textContent = timeStr;
+            
+            return { date: dateStr, time: timeStr };
+        }
+
+        function selectCourseType(type) {
+            // 移除所有按鈕的selected類
+            document.querySelectorAll('.course-type-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // 為選中的按鈕添加selected類
+            event.currentTarget.classList.add('selected');
+            
+            selectedCourseType = type;
+            
+            // 啟用新增按鈕
+            document.getElementById('addSessionBtn').disabled = false;
+        }
+
+        function selectSessionStatus(status) {
+            // 移除所有按鈕的selected類
+            document.querySelectorAll('.status-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // 為選中的按鈕添加selected類
+            event.currentTarget.classList.add('selected');
+            
+            selectedSessionStatus = status;
+            
+            // 如果是請假狀態，顯示請假原因輸入框
+            if (status === 'absent') {
+                document.getElementById('absentReasonSection').style.display = 'block';
+            } else {
+                document.getElementById('absentReasonSection').style.display = 'none';
+            }
+        }
+
+        function addPendingSession() {
+            if (!selectedCourseType) {
+                alert('請先選擇課程類型');
+                return;
+            }
+            
+            // 如果是請假狀態，檢查是否填寫了請假原因
+            if (selectedSessionStatus === 'absent') {
+                const reason = document.getElementById('absentReason').value.trim();
+                if (!reason) {
+                    alert('請填寫請假原因');
+                    return;
+                }
+            }
+            
+            // 如果是補堂狀態，顯示提示信息
+            if (selectedSessionStatus === 'makeup') {
+                alert('補堂課程需要獨立處理，請確認您正在添加的是補堂課程。');
+            }
+            
+            const date = document.getElementById('sessionDate').value;
+            const start = document.getElementById('startTime').value;
+            const end = document.getElementById('endTime').value;
+            
+            if (!date) {
+                alert('請選擇日期');
+                return;
+            }
+            
+            if (!start || !end) {
+                alert('請選擇開始和結束時間');
+                return;
+            }
+            
+            const duration = calculateDuration(start, end);
+            if (duration <= 0) {
+                alert('結束時間必須晚於開始時間');
+                return;
+            }
+            
+            const config = courseConfig[selectedCourseType];
+            const absentReason = document.getElementById('absentReason').value.trim();
+            
+            // 創建暫存課程對象
+            const pendingSession = {
+                id: Date.now(),
+                type: selectedCourseType,
+                date,
+                start,
+                end,
+                duration,
+                status: selectedSessionStatus,
+                makeupFor: null,
+                absentReason: selectedSessionStatus === 'absent' ? absentReason : null
+            };
+            
+            // 添加到暫存列表
+            pendingSessions.push(pendingSession);
+            
+            // 更新暫存課程列表顯示
+            updatePendingSessionsList();
+            
+            // 顯示成功消息
+            const message = document.getElementById('addSuccessMessage');
+            message.classList.add('show');
+            
+            // 3秒後隱藏消息
+            setTimeout(() => {
+                message.classList.remove('show');
+            }, 3000);
+            
+            // 清空請假原因輸入框
+            document.getElementById('absentReason').value = '';
+        }
+
+        function updatePendingSessionsList() {
+            const container = document.getElementById('pendingSessionsContainer');
+            container.innerHTML = '';
+            
+            if (pendingSessions.length === 0) {
+                document.getElementById('pendingSessionCount').textContent = '0';
+                return;
+            }
+            
+            document.getElementById('pendingSessionCount').textContent = pendingSessions.length;
+            
+            pendingSessions.forEach((session, index) => {
+                const config = courseConfig[session.type];
+                let statusText = '';
+                let statusClass = '';
+                switch(session.status) {
+                    case 'absent':
+                        statusText = '（請假）';
+                        statusClass = 'status-absent';
+                        break;
+                    case 'makeup':
+                        statusText = '（補堂）';
+                        statusClass = 'status-makeup';
+                        break;
+                    default:
+                        statusText = '（正常）';
+                        statusClass = 'status-normal';
+                }
+                
+                const sessionItem = document.createElement('div');
+                sessionItem.className = 'pending-session-item';
+                sessionItem.setAttribute('data-id', session.id);
+                sessionItem.innerHTML = `
+                    <div class="pending-session-info">
+                        <span class="session-type ${session.type}-type">${config.type}</span>
+                        <span>${formatDate(session.date)} ${formatTime(session.start)}-${formatTime(session.end)} (${formatDuration(session.duration)})</span>
+                        <span class="session-status ${statusClass}">${statusText}</span>
+                        ${session.absentReason ? `<div style="margin-top:5px;font-size:0.9em;">請假原因: ${session.absentReason}</div>` : ''}
+                    </div>
+                    <div class="pending-session-actions">
+                        <span class="remove-btn" onclick="removePendingSession(${session.id})">
+                            <i class="fas fa-trash"></i> 刪除
+                        </span>
+                    </div>
+                `;
+                
+                container.appendChild(sessionItem);
+            });
+        }
+
+        function removePendingSession(sessionId) {
+            pendingSessions = pendingSessions.filter(s => s.id !== sessionId);
+            updatePendingSessionsList();
+        }
+
+        function confirmPendingSessions() {
+            if (pendingSessions.length === 0) {
+                alert('暫無待確認的課程');
+                return;
+            }
+            
+            // 檢查是否有補堂課程需要選擇請假課堂
+            const makeupSessions = pendingSessions.filter(s => s.status === 'makeup');
+            if (makeupSessions.length > 0) {
+                // 獲取所有請假課堂
+                const absentSessions = allSessions.filter(s => s.status === 'absent');
+                
+                if (absentSessions.length === 0) {
+                    alert('您添加了補堂課程，但沒有可補的請假課堂。請先添加請假課堂或取消補堂標記。');
+                    return;
+                }
+                
+                // 顯示補堂選擇模態框
+                showMakeupModal();
+            } else {
+                // 沒有補堂課程，直接添加所有暫存課程
+                addAllPendingSessions();
+            }
+        }
+
+        function addAllPendingSessions() {
+            pendingSessions.forEach(session => {
+                // 如果是補堂課程，設置對應的請假課堂ID
+                if (session.status === 'makeup' && selectedAbsentSession) {
+                    session.makeupFor = selectedAbsentSession.id;
+                    
+                    // 添加請假待補堂記錄
+                    pendingMakeupRecords.push({
+                        absentSession: selectedAbsentSession,
+                        makeupSession: {
+                            type: session.type,
+                            date: session.date,
+                            start: session.start,
+                            end: session.end,
+                            duration: session.duration,
+                            id: session.id
+                        }
+                    });
+                }
+                
+                // 添加到正式課程列表
+                addSession(session);
+            });
+            
+            // 清空暫存列表
+            pendingSessions = [];
+            updatePendingSessionsList();
+            selectedAbsentSession = null;
+            
+            // 顯示成功添加課程的提示
+            const message = document.getElementById('courseAddedMessage');
+            message.style.display = 'block';
+            
+            // 3秒後自動隱藏提示
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 3000);
+            
+            // 更新Excel表格
+            updateExcelTable();
+        }
+
+        // 顯示補堂選擇模態框
+        function showMakeupModal() {
+            // 獲取所有請假課堂
+            makeupSessions = allSessions.filter(session => session.status === 'absent');
+            
+            const makeupList = document.getElementById('makeupList');
+            makeupList.innerHTML = '';
+            
+            if (makeupSessions.length === 0) {
+                document.getElementById('noMakeupSessions').style.display = 'block';
+            } else {
+                document.getElementById('noMakeupSessions').style.display = 'none';
+            }
+            
+            // 生成請假課堂列表
+            makeupSessions.forEach((session, index) => {
+                const config = courseConfig[session.type];
+                const item = document.createElement('div');
+                item.className = 'makeup-item';
+                item.setAttribute('data-id', session.id);
+                item.onclick = function() {
+                    selectMakeupSession(this, session.id);
+                };
+                
+                item.innerHTML = `
+                    <div class="makeup-date">${formatDate(session.date)} ${formatTime(session.start)}-${formatTime(session.end)}</div>
+                    <div class="makeup-details">${config.type} (${formatDuration(session.duration)})</div>
+                    <div class="makeup-details">請假原因: ${session.absentReason || '未填寫'}</div>
+                `;
+                
+                makeupList.appendChild(item);
+            });
+            
+            // 顯示模態框
+            document.getElementById('makeupModal').style.display = 'block';
+            
+            // 重置未記錄請假課堂輸入框
+            document.getElementById('unrecordedAbsentDate').value = '';
+            document.getElementById('unrecordedAbsentStart').value = '';
+            document.getElementById('unrecordedAbsentEnd').value = '';
+            document.getElementById('unrecordedAbsentReason').value = '';
+        }
+
+        // 添加未記錄的請假課堂
+        function addUnrecordedAbsent() {
+            const date = document.getElementById('unrecordedAbsentDate').value;
+            const start = document.getElementById('unrecordedAbsentStart').value;
+            const end = document.getElementById('unrecordedAbsentEnd').value;
+            const type = document.getElementById('unrecordedAbsentType').value;
+            const reason = document.getElementById('unrecordedAbsentReason').value.trim();
+            
+            if (!date) {
+                alert('請選擇日期');
+                return;
+            }
+            
+            if (!start || !end) {
+                alert('請選擇開始和結束時間');
+                return;
+            }
+            
+            if (!reason) {
+                alert('請填寫請假原因');
+                return;
+            }
+            
+            // 格式化時間
+            const startTime = start.replace(':', '');
+            const endTime = end.replace(':', '');
+            
+            const duration = calculateDuration(startTime, endTime);
+            if (duration <= 0) {
+                alert('結束時間必須晚於開始時間');
+                return;
+            }
+            
+            // 創建未記錄的請假課堂對象
+            const unrecordedAbsent = {
+                id: Date.now(),
+                type,
+                date,
+                start: startTime,
+                end: endTime,
+                duration,
+                status: 'absent',
+                absentReason: reason,
+                isUnrecorded: true
+            };
+            
+            // 添加到請假課堂列表
+            makeupSessions.push(unrecordedAbsent);
+            
+            // 更新顯示
+            const makeupList = document.getElementById('makeupList');
+            const item = document.createElement('div');
+            item.className = 'makeup-item';
+            item.setAttribute('data-id', unrecordedAbsent.id);
+            item.onclick = function() {
+                selectMakeupSession(this, unrecordedAbsent.id);
+            };
+            
+            const config = courseConfig[type];
+            item.innerHTML = `
+                <div class="makeup-date">${formatDate(date)} ${start}-${end}</div>
+                <div class="makeup-details">${config.type} (${formatDuration(duration)})</div>
+                <div class="makeup-details">請假原因: ${reason}</div>
+            `;
+            
+            makeupList.appendChild(item);
+            
+            // 隱藏"暫無可補的請假課堂"提示
+            document.getElementById('noMakeupSessions').style.display = 'none';
+            
+            // 自動選中新添加的請假課堂
+            selectMakeupSession(item, unrecordedAbsent.id);
+            
+            // 顯示成功消息
+            alert('未記錄的請假課堂已添加！');
+        }
+
+        // 選擇補堂課堂
+        function selectMakeupSession(element, sessionId) {
+            // 移除所有選中狀態
+            document.querySelectorAll('.makeup-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // 添加選中狀態
+            element.classList.add('selected');
+            
+            // 設置選中的請假課堂
+            selectedAbsentSession = makeupSessions.find(session => session.id === sessionId);
+        }
+
+        // 關閉補堂選擇模態框
+        function closeMakeupModal() {
+            document.getElementById('makeupModal').style.display = 'none';
+            selectedAbsentSession = null;
+        }
+
+        // 確認補堂選擇
+        function confirmMakeupSelection() {
+            if (!selectedAbsentSession) {
+                alert('請選擇要補的請假課堂');
+                return;
+            }
+            
+            // 如果是未記錄的請假課堂，添加到正式課程列表
+            if (selectedAbsentSession.isUnrecorded) {
+                allSessions.push({
+                    id: selectedAbsentSession.id,
+                    type: selectedAbsentSession.type,
+                    date: selectedAbsentSession.date,
+                    start: selectedAbsentSession.start,
+                    end: selectedAbsentSession.end,
+                    duration: selectedAbsentSession.duration,
+                    status: 'absent',
+                    absentReason: selectedAbsentSession.absentReason
+                });
+                
+                // 更新課程計數
+                updateSessionCount();
+            }
+            
+            // 添加所有暫存課程
+            addAllPendingSessions();
+            
+            // 關閉模態框
+            closeMakeupModal();
+        }
+
+        function addSession(session) {
+            const config = courseConfig[session.type];
+            
+            // 根據狀態設置顯示文本
+            let statusText = '';
+            let statusClass = '';
+            switch(session.status) {
+                case 'makeup':
+                    statusText = '補堂';
+                    statusClass = 'status-makeup';
+                    break;
+                default:
+                    statusText = '正常';
+                    statusClass = 'status-normal';
+            }
+            
+            // 只有正常課程和補堂課程會顯示在課程列表中
+            if (session.status !== 'absent') {
+                const card = document.createElement('div');
+                card.className = 'session-card';
+                card.setAttribute('data-id', session.id);
+                card.innerHTML = `
+                    <div class="session-info">
+                        <span class="session-type ${session.type}-type">${config.type}</span>
+                        <span>${formatDate(session.date)} ${formatTime(session.start)}-${formatTime(session.end)} (${formatDuration(session.duration)})</span>
+                        <span class="session-status ${statusClass}">${statusText}</span>
+                    </div>
+                    <div class="session-actions">
+                        <span class="remove-btn" onclick="removeSession(${session.id})">
+                            <i class="fas fa-trash"></i> 刪除
+                        </span>
+                    </div>
+                `;
+
+                document.getElementById('allSessions').appendChild(card);
+            }
+            
+            allSessions.push(session);
+
+            // 更新課程計數
+            updateSessionCount();
+            
+            // 自動更新學費單預覽
+            generatePreview();
+            
+            // 更新Excel表格
+            updateExcelTable();
+        }
+
+        function updateSessionCount() {
+            // 只計算正常課程和補堂課程
+            const visibleSessions = allSessions.filter(session => session.status !== 'absent');
+            document.getElementById('sessionCount').textContent = visibleSessions.length;
+        }
+
+        function removeSession(sessionId) {
+            // 檢查是否是補堂記錄，如果是則從pendingMakeupRecords中移除
+            const sessionToRemove = allSessions.find(s => s.id === sessionId);
+            if (sessionToRemove?.makeupFor) {
+                pendingMakeupRecords = pendingMakeupRecords.filter(record => 
+                    record.makeupSession.id !== sessionId
+                );
+            }
+            
+            // 從正式課程列表中移除
+            allSessions = allSessions.filter(s => s.id !== sessionId);
+            document.querySelector(`.session-card[data-id="${sessionId}"]`)?.remove();
+            
+            // 更新課程計數
+            updateSessionCount();
+            
+            // 自動更新學費單預覽
+            generatePreview();
+            
+            // 更新Excel表格
+            updateExcelTable();
+        }
+
+        function calculateFee() {
+            if (allSessions.length === 0 && adjustments.length === 0) {
+                alert('請先添加課程或學費調整');
+                return;
+            }
+            
+            document.getElementById('adjustmentSection').style.display = 'block';
+            document.getElementById('livePreview').textContent = '請新增學費調整（如需要）後點擊「生成學費單」按鈕';
+            
+            // 顯示確認信息
+            const confirmation = document.getElementById('calculationConfirmation');
+            confirmation.style.display = 'block';
+            
+            // 3秒後自動隱藏確認信息
+            setTimeout(() => {
+                confirmation.style.display = 'none';
+            }, 3000);
+        }
+
+        function addAdjustment() {
+            const amount = parseFloat(document.getElementById('adjustmentAmount').value);
+            const reason = document.getElementById('adjustmentReason').value.trim();
+            
+            if (isNaN(amount)) {
+                alert('請輸入有效的調整金額');
+                return;
+            }
+            
+            if (!reason) {
+                alert('請輸入調整原因');
+                return;
+            }
+            
+            const adjustmentId = Date.now();
+            adjustments.push({
+                id: adjustmentId,
+                amount,
+                reason
+            });
+            
+            // 更新調整列表顯示
+            updateAdjustmentList();
+            
+            // 清空輸入框
+            document.getElementById('adjustmentAmount').value = '';
+            document.getElementById('adjustmentReason').value = '';
+            
+            // 顯示成功添加調整的提示
+            const message = document.getElementById('adjustmentAddedMessage');
+            message.style.display = 'block';
+            
+            // 3秒後自動隱藏提示
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 3000);
+            
+            // 自動更新學費單預覽
+            generatePreview();
+        }
+
+        function updateAdjustmentList() {
+            const listContainer = document.getElementById('adjustmentList');
+            listContainer.innerHTML = '';
+            
+            if (adjustments.length === 0) {
+                listContainer.innerHTML = '<p>暫無學費調整記錄</p>';
+                return;
+            }
+            
+            adjustments.forEach((adj, index) => {
+                const adjItem = document.createElement('div');
+                adjItem.className = 'adjustment-item';
+                adjItem.innerHTML = `
+                    <strong>調整 #${index + 1}:</strong> ${adj.amount > 0 ? '+' : ''}${adj.amount}元
+                    <div>原因: ${adj.reason}</div>
+                    <div style="text-align:right;margin-top:5px;">
+                        <span class="remove-btn" onclick="removeAdjustment(${adj.id})">
+                            <i class="fas fa-trash"></i> 刪除
+                        </span>
+                    </div>
+                `;
+                listContainer.appendChild(adjItem);
+            });
+        }
+
+        function removeAdjustment(adjustmentId) {
+            adjustments = adjustments.filter(a => a.id !== adjustmentId);
+            updateAdjustmentList();
+            
+            // 自動更新學費單預覽
+            generatePreview();
+        }
+
+        function generatePreview() {
+            const studentName = document.getElementById('studentName').value;
+            const coachName = document.getElementById('coachName').value;
+            const monthRange = getMonthRangeFromSessions();
+            const invoiceDateTime = updateInvoiceDateTime();
+            
+            // 按課程類型分類 (WhatsApp版本使用)
+            const sessionsByType = {
+                private: [],
+                group: [],
+                competition: [],
+                elite: []
+            };
+            
+            allSessions.forEach(session => {
+                if (session.date && session.start && session.end && session.duration > 0) {
+                    sessionsByType[session.type].push(session);
+                }
+            });
+            
+            // 新標題格式：學生姓名 + 月份 + 乒乓球課程學費單 (WhatsApp版本)
+            let previewText = `【${studentName || '未填寫'} - ${monthRange} - 乒乓球課程學費單】\n\n`;
+            previewText += `學員姓名：${studentName || '未填寫'}\n`;
+            previewText += `負責教練：${coachName || '未填寫'}\n`;
+            previewText += `開單日期：${invoiceDateTime.date} ${invoiceDateTime.time}\n\n`;
+            
+            currentTotalFee = 0;
+            let hasValidSessions = false;
+            
+            // 處理每種課程類型 (WhatsApp版本)
+            Object.keys(sessionsByType).forEach(type => {
+                const sessions = sessionsByType[type];
+                const config = courseConfig[type];
+                
+                if (sessions.length > 0) {
+                    hasValidSessions = true;
+                    
+                    previewText += `${config.oldType}\n`;
+                    previewText += `日期：\n`;
+                    
+                    let typeTotal = 0;
+                    let unitCount = 0;
+                    
+                    // 為每個課程添加序號
+                    sessions.forEach((session, index) => {
+                        // 跳過請假課堂，它們會在請假待補堂記錄區顯示
+                        if (session.status === 'absent') return;
+                        
+                        const dateStr = formatDate(session.date);
+                        const timeRange = `${formatTime(session.start)}-${formatTime(session.end)}`;
+                        const durationText = formatDuration(session.duration);
+                        
+                        // 添加狀態標記
+                        let statusText = '';
+                        if (session.status === 'makeup') {
+                            statusText = '（補堂）';
+                        } else {
+                            statusText = '（正常）';
+                        }
+                        
+                        previewText += `${index + 1}. ${dateStr}（${timeRange}）【${durationText}】${statusText}\n`;
+                        
+                        // 只計算正常課程（補堂不計費）
+                        if (session.status !== 'normal') return;
+                        
+                        if (config.calculateByHour) {
+                            // 私人課程和專才教練課程按小時計算
+                            const fee = session.duration * config.rate;
+                            typeTotal += fee;
+                            unitCount += session.duration;
+                        } else {
+                            // 小組班和比賽班課程按堂數計算
+                            const classes = session.duration / config.durationPerClass;
+                            const roundedClasses = Math.ceil(classes);
+                            fee = roundedClasses * config.rate;
+                            typeTotal += fee;
+                            unitCount += roundedClasses;
+                        }
+                    });
+                    
+                    previewText += `\n學費標準：\n${formatCurrency(config.rate)}/${config.unit}\n\n`;
+                    previewText += `${config.oldType.replace('➖➖', '').replace('➖➖', '')}學費單計：\n`;
+                    
+                    // 格式化金額顯示
+                    const formattedTotal = formatCurrency(typeTotal);
+                    
+                    previewText += `${formattedTotal}【${unitCount}${config.unit}】\n\n`;
+                    
+                    currentTotalFee += typeTotal;
+                }
+            });
+            
+            // 如果沒有任何課程但有調整項目，仍然生成學費單
+            if (!hasValidSessions && adjustments.length > 0) {
+                previewText += `🟰🟰${monthRange}學費調整單🟰🟰\n`;
+            } else if (hasValidSessions || adjustments.length > 0) {
+                previewText += `🟰🟰${monthRange}學費總計🟰🟰\n`;
+            }
+            
+            // 計算調整總額
+            let adjustmentTotal = 0;
+            let adjustmentText = '';
+            
+            if (adjustments.length > 0) {
+                adjustmentText += '\n學費調整記錄：\n';
+                
+                adjustments.forEach((adj, index) => {
+                    adjustmentTotal += adj.amount;
+                    adjustmentText += `調整 #${index + 1}: ${adj.amount > 0 ? '+' : ''}${formatCurrency(adj.amount)} (原因: ${adj.reason})\n`;
+                });
+                
+                adjustmentText += `\n學費調整總計: ${adjustmentTotal > 0 ? '+' : ''}${formatCurrency(adjustmentTotal)}\n`;
+            }
+            
+            // 計算最終總金額
+            const finalTotal = currentTotalFee + adjustmentTotal;
+            
+            if (hasValidSessions) {
+                previewText += `課程學費: ${formatCurrency(currentTotalFee)}\n`;
+            }
+            
+            if (adjustments.length > 0) {
+                previewText += adjustmentText;
+                previewText += `\n最終應付總額: ${formatCurrency(finalTotal)}\n`;
+            } else if (hasValidSessions) {
+                previewText += `最終應付總額: ${formatCurrency(finalTotal)}\n`;
+            } else if (adjustments.length > 0) {
+                previewText += `調整後應付總額: ${formatCurrency(finalTotal)}\n`;
+            }
+            
+            // 添加請假待補堂記錄
+            const absentSessions = allSessions.filter(s => s.status === 'absent');
+            if (absentSessions.length > 0) {
+                previewText += `\n⚠️ 請假待補堂記錄 ⚠️\n`;
+                absentSessions.forEach(session => {
+                    const config = courseConfig[session.type];
+                    const makeupSession = pendingMakeupRecords.find(r => r.absentSession.id === session.id)?.makeupSession;
+                    
+                    previewText += `\n請假課堂：${formatDate(session.date)} ${formatTime(session.start)}-${formatTime(session.end)} (${config.type})\n`;
+                    if (session.absentReason) {
+                        previewText += `請假原因: ${session.absentReason}\n`;
+                    }
+                    
+                    if (makeupSession) {
+                        const makeupConfig = courseConfig[makeupSession.type];
+                        previewText += `已安排補堂：${formatDate(makeupSession.date)} ${formatTime(makeupSession.start)}-${formatTime(makeupSession.end)} (${makeupConfig.type})\n`;
+                    } else {
+                        previewText += `尚未安排補堂\n`;
+                    }
+                });
+            }
+            
+            // 加入固定繳費流程內容
+            previewText += `\n學費繳付流程（請參照《學費繳付流程圖》之內容）\n`;
+            previewText += `https://drive.google.com/file/d/1lUeRvGwwLvZ9R1R5j-7wkmLUSZLdeTPE/view?usp=drivesdk\n`;
+            
+            // 顯示繳費流程按鈕
+            document.getElementById('paymentGuideBtn').style.display = 'block';
+            
+            // 保存原始文案
+            originalPreviewText = previewText;
+            
+            document.getElementById('livePreview').textContent = previewText;
+            
+            // 顯示學費單生成成功的提示
+            const message = document.getElementById('invoiceGeneratedMessage');
+            message.style.display = 'block';
+            
+            // 3秒後自動隱藏提示
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 3000);
+        }
+
+        function generateFormalInvoice() {
+            const studentName = document.getElementById('studentName').value || '未填寫';
+            const institution = document.getElementById('institution').value || '未填寫';
+            const coachName = document.getElementById('coachName').value || '未填寫';
+            const invoiceDateTime = updateInvoiceDateTime();
+            const monthRange = getMonthRangeFromSessions();
+            const currentYear = new Date().getFullYear();
+            
+            // 更新學費單標題
+            document.getElementById('formalInvoiceTitle').textContent = `${studentName} - ${currentYear}年${monthRange} - 乒乓球課程學費單`;
+            
+            // 更新學員和教練信息
+            document.getElementById('formalStudentName').textContent = studentName;
+            document.getElementById('formalInstitution').textContent = institution;
+            document.getElementById('formalCoachName').textContent = coachName;
+            document.getElementById('formalInvoiceDate').textContent = invoiceDateTime.date;
+            document.getElementById('formalInvoiceTime').textContent = invoiceDateTime.time;
+            
+            const invoiceContainer = document.getElementById('formalInvoiceContent');
+            
+            if (allSessions.length === 0 && adjustments.length === 0) {
+                invoiceContainer.innerHTML = '<p style="text-align: center; color: #777;">請先新增課程或學費調整，然後點擊「生成學費單」按鈕</p>';
+                return;
+            }
+            
+            // 按周分組課程（不包括請假課程）
+            const weeks = groupSessionsByWeek(allSessions);
+            
+            // 計算各類課程的小計（不包括請假課程）
+            const typeSummary = calculateTypeSummary(allSessions);
+            
+            // 計算調整總額
+            let adjustmentTotal = 0;
+            adjustments.forEach(adj => {
+                adjustmentTotal += adj.amount;
+            });
+            
+            // 計算最終總金額
+            const finalTotal = currentTotalFee + adjustmentTotal;
+            
+            let invoiceHTML = '';
+            
+            // 添加課程明細表格
+            if (allSessions.length > 0) {
+                invoiceHTML += `
+                    <table class="invoice-table">
+                        <thead>
+                            <tr>
+                                <th>周次</th>
+                                <th>日期</th>
+                                <th>課程類別</th>
+                                <th>時間</th>
+                                <th>時長</th>
+                                <th>狀態</th>
+                                <th>費用</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                if (weeks.length > 0) {
+                    weeks.forEach((week, weekIndex) => {
+                        // 添加周次標題行
+                        invoiceHTML += `
+                            <tr style="background-color: #f8f9fa;">
+                                <td colspan="7" style="font-weight: bold;">
+                                    第 ${weekIndex + 1} 周 (${week.monday} 至 ${week.sunday})
+                                </td>
+                            </tr>
+                        `;
+                        
+                        // 添加該周的課程
+                        week.sessions.forEach(session => {
+                            const config = courseConfig[session.type];
+                            let fee = 0;
+                            let unitText = '';
+                            let statusText = '';
+                            let statusClass = '';
+                            
+                            // 設置狀態顯示
+                            switch(session.status) {
+                                case 'makeup':
+                                    statusText = '補堂';
+                                    statusClass = 'status-makeup';
+                                    break;
+                                default:
+                                    statusText = '正常';
+                                    statusClass = 'status-normal';
+                            }
+                            
+                            // 只計算正常課程的費用（補堂不計費）
+                            if (session.status === 'normal') {
+                                if (config.calculateByHour) {
+                                    // 私人課程和專才教練課程按小時計算
+                                    fee = session.duration * config.rate;
+                                    unitText = `${session.duration.toFixed(1)} ${config.unit}`;
+                                } else {
+                                    // 小組班和比賽班課程按堂數計算
+                                    const classes = session.duration / config.durationPerClass;
+                                    const roundedClasses = Math.ceil(classes);
+                                    fee = roundedClasses * config.rate;
+                                    unitText = `${roundedClasses} ${config.unit}`;
+                                }
+                            }
+                            
+                            invoiceHTML += `
+                                <tr>
+                                    <td></td>
+                                    <td>${formatDate(session.date)}</td>
+                                    <td><span class="course-type ${config.classType}">${config.type}</span></td>
+                                    <td>${formatTime(session.start)}-${formatTime(session.end)}</td>
+                                    <td>${formatDuration(session.duration)}</td>
+                                    <td><span class="session-status ${statusClass}">${statusText}</span></td>
+                                    <td>${session.status !== 'normal' ? '豁免' : formatCurrency(fee)}</td>
+                                </tr>
+                            `;
+                        });
+                    });
+                }
+                
+                invoiceHTML += `
+                        </tbody>
+                    </table>
+                `;
+            }
+            
+            // 添加學費摘要
+            invoiceHTML += `
+                <div class="invoice-summary">
+                    <h3>學費摘要</h3>
+            `;
+            
+            if (allSessions.length > 0) {
+                invoiceHTML += `            
+                    <div class="summary-item">
+                        <span class="summary-label">私人課程 (${formatCurrency(courseConfig.private.rate)}/小時):</span>
+                        <span class="summary-value">
+                            ${typeSummary.private.hours > 0 ? `${typeSummary.private.hours.toFixed(1)} 小時 × ${formatCurrency(courseConfig.private.rate)} = ${formatCurrency(typeSummary.private.fee)}` : '無'}
+                        </span>
+                    </div>
+                    
+                    <div class="summary-item">
+                        <span class="summary-label">小組班 (${formatCurrency(courseConfig.group.rate)}/堂):</span>
+                        <span class="summary-value">
+                            ${typeSummary.group.count > 0 ? `${typeSummary.group.count} 堂 × ${formatCurrency(courseConfig.group.rate)} = ${formatCurrency(typeSummary.group.fee)}` : '無'}
+                        </span>
+                    </div>
+                    
+                    <div class="summary-item">
+                        <span class="summary-label">比賽班 (${formatCurrency(courseConfig.competition.rate)}/堂):</span>
+                        <span class="summary-value">
+                            ${typeSummary.competition.count > 0 ? `${typeSummary.competition.count} 堂 × ${formatCurrency(courseConfig.competition.rate)} = ${formatCurrency(typeSummary.competition.fee)}` : '無'}
+                        </span>
+                    </div>
+                    
+                    <div class="summary-item">
+                        <span class="summary-label">專才教練 (${formatCurrency(courseConfig.elite.rate)}/小時):</span>
+                        <span class="summary-value">
+                            ${typeSummary.elite.hours > 0 ? `${typeSummary.elite.hours.toFixed(1)} 小時 × ${formatCurrency(courseConfig.elite.rate)} = ${formatCurrency(typeSummary.elite.fee)}` : '無'}
+                        </span>
+                    </div>
+                    
+                    <div class="summary-item" style="margin-top: 15px; border-top: 1px solid #ddd; padding-top: 10px;">
+                        <span class="summary-label">課程學費總計:</span>
+                        <span class="summary-value">${formatCurrency(currentTotalFee)}</span>
+                    </div>
+                `;
+            }
+            
+            // 添加學費調整
+            if (adjustments.length > 0) {
+                invoiceHTML += `
+                    <div class="adjustment-list-invoice">
+                        <h4>學費調整</h4>
+                `;
+                
+                adjustments.forEach((adj, index) => {
+                    invoiceHTML += `
+                        <div class="adjustment-item-invoice">
+                            <strong>調整 #${index + 1}:</strong> ${adj.amount > 0 ? '+' : ''}${formatCurrency(adj.amount)}
+                            <span class="adjustment-reason">(原因: ${adj.reason})</span>
+                        </div>
+                    `;
+                });
+                
+                invoiceHTML += `
+                        <div class="summary-item" style="margin-top: 10px;">
+                            <span class="summary-label">學費調整總計:</span>
+                            <span class="summary-value">${adjustmentTotal > 0 ? '+' : ''}${formatCurrency(adjustmentTotal)}</span>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // 添加總計
+            invoiceHTML += `
+                    <div class="invoice-total">
+                        <div class="summary-item">
+                            <span class="summary-label">${allSessions.length > 0 ? '最終' : '調整後'}應付總額:</span>
+                            <span class="summary-value total-amount">${formatCurrency(finalTotal)}</span>
+                        </div>
+                    </div>
+            `;
+            
+            // 添加請假待補堂記錄區
+            const absentSessions = allSessions.filter(s => s.status === 'absent');
+            if (absentSessions.length > 0) {
+                invoiceHTML += `
+                    <div class="makeup-record-section">
+                        <h3>請假待補堂記錄</h3>
+                `;
+                
+                absentSessions.forEach(session => {
+                    const config = courseConfig[session.type];
+                    const makeupSession = pendingMakeupRecords.find(r => r.absentSession.id === session.id)?.makeupSession;
+                    
+                    invoiceHTML += `
+                        <div class="makeup-record-item">
+                            <div class="makeup-record-date">
+                                ${formatDate(session.date)} ${formatTime(session.start)}-${formatTime(session.end)} (${config.type})
+                            </div>
+                            <div class="makeup-record-details">
+                                ${formatDuration(session.duration)} 請假課堂
+                            </div>
+                            ${session.absentReason ? `
+                            <div class="makeup-record-details">
+                                請假原因: ${session.absentReason}
+                            </div>
+                            ` : ''}
+                    `;
+                    
+                    if (makeupSession) {
+                        const makeupConfig = courseConfig[makeupSession.type];
+                        invoiceHTML += `
+                            <div class="makeup-record-details">
+                                已安排補堂：${formatDate(makeupSession.date)} ${formatTime(makeupSession.start)}-${formatTime(makeupSession.end)} (${makeupConfig.type})
+                            </div>
+                            <span class="makeup-record-status makeup-record-completed">已安排補堂</span>
+                        `;
+                    } else {
+                        invoiceHTML += `
+                            <span class="makeup-record-status makeup-record-pending">尚未安排補堂</span>
+                        `;
+                    }
+                    
+                    invoiceHTML += `</div>`;
+                });
+                
+                invoiceHTML += `</div>`;
+            }
+            
+            // 添加付款方式
+            invoiceHTML += `
+                <div class="payment-methods">
+                    <div class="payment-method">
+                        <h3>PayMe 付款</h3>
+                        <img src="https://i.meee.com.tw/NIgdVic.jpeg" alt="PayMe QR Code">
+                        <div class="payment-steps" style="counter-reset: step;">
+                            <div class="payment-step">打開PayMe應用程式</div>
+                            <div class="payment-step">掃描上方QR Code</div>
+                            <div class="payment-step">於付款備註中輸入「學員中文全名/課程名稱/學費月份」</div>
+                            <div class="payment-step">完成付款後，截圖付款記錄</div>
+                            <div class="payment-step">將截圖發送至負責教練WhatsApp</div>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-method">
+                        <h3>銀行轉賬 (FPS/ATM)</h3>
+                        <div style="margin: 15px 0;">
+                            <strong>銀行戶口名稱:</strong> Ping Pong Savantas<br>
+                            <strong>銀行名稱:</strong> 滙豐銀行 (HSBC)<br>
+                            <strong>銀行戶口號碼:</strong> 8018-2962-3838<br>
+                        </div>
+                        <div class="payment-steps" style="counter-reset: step;">
+                            <div class="payment-step">使用網上銀行、手機銀行或ATM櫃員機</div>
+                            <div class="payment-step">選擇轉數快(FPS)轉賬或直接轉賬</div>
+                            <div class="payment-step">輸入上方銀行戶口號碼</div>
+                            <div class="payment-step">於付款備註中輸入「學員中文全名/課程名稱/學費月份」</div>
+                            <div class="payment-step">完成付款後，截圖付款記錄或保留收據</div>
+                            <div class="payment-step">將截圖/收據拍照發送至負責教練WhatsApp</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="invoice-footer">
+                    <p>收到學費單後請核對正確後盡快繳交，感謝欣賞和支持！</p>
+                </div>
+            `;
+            
+            invoiceContainer.innerHTML = invoiceHTML;
+        }
+
+        function editPreviewText() {
+            const currentText = document.getElementById('livePreview').textContent;
+            const newText = prompt("請編輯文案內容：", currentText);
+            
+            if (newText !== null) {
+                document.getElementById('livePreview').textContent = newText;
+                originalPreviewText = newText;
+            }
+        }
+
+        function openPaymentGuide() {
+            window.open('https://drive.google.com/file/d/1lUeRvGwwLvZ9R1R5j-7wkmLUSZLdeTPE/view?usp=drivesdk', '_blank');
+        }
+
+        function copyText() {
+            const text = document.getElementById('livePreview').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('文案已複製到剪貼簿');
+            });
+        }
+
+        function sendWhatsApp() {
+            const text = encodeURIComponent(document.getElementById('livePreview').textContent);
+            window.open(`https://api.whatsapp.com/send?text=${text}`);
+        }
+
+        // 更新Excel表格
+        function updateExcelTable() {
+            const tableBody = document.getElementById('excelTableBody');
+            const studentName = document.getElementById('studentName').value || '未填寫';
+            const coachName = document.getElementById('coachName').value || '未填寫';
+            
+            // 過濾掉請假課堂
+            const visibleSessions = allSessions.filter(session => session.status !== 'absent');
+            
+            // 更新課程計數
+            document.getElementById('excelSessionCount').textContent = visibleSessions.length;
+            
+            if (visibleSessions.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; color: #777;">請先新增課程，然後點擊「更新Excel表格」按鈕</td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // 按日期排序
+            const sortedSessions = sortSessionsByDate(visibleSessions);
+            
+            // 清空表格
+            tableBody.innerHTML = '';
+            
+            // 添加課程行
+            sortedSessions.forEach(session => {
+                const date = new Date(session.date);
+                const days = ['日', '一', '二', '三', '四', '五', '六'];
+                const dayOfWeek = days[date.getDay()];
+                
+                // 計算課堂時長（小時），使用小數點表示
+                const durationHours = session.duration.toFixed(2);
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${formatSimpleDate(session.date)}</td>
+                    <td>週${dayOfWeek}</td>
+                    <td>${formatTime(session.start)}-${formatTime(session.end)}</td>
+                    <td>${durationHours}</td>
+                    <td>${coachName}</td>
+                    <td>${studentName}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+
+        // 複製Excel表格數據到剪貼簿（包含表頭）
+        function copyExcelDataWithHeaders() {
+            const table = document.getElementById('excelTable');
+            
+            // 創建一個臨時的div來存放要複製的內容
+            const tempDiv = document.createElement('div');
+            tempDiv.style.position = 'absolute';
+            tempDiv.style.left = '-9999px';
+            
+            // 創建一個臨時表格來保持格式
+            const tempTable = document.createElement('table');
+            tempTable.style.borderCollapse = 'collapse';
+            tempTable.style.border = '1px solid #ddd';
+            
+            // 複製表頭
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            
+            Array.from(table.querySelectorAll('th')).forEach(th => {
+                const newTh = document.createElement('th');
+                newTh.textContent = th.textContent;
+                newTh.style.border = '1px solid #ddd';
+                newTh.style.padding = '8px';
+                newTh.style.backgroundColor = '#f1f8ff';
+                newTh.style.textAlign = 'left';
+                headerRow.appendChild(newTh);
+            });
+            
+            thead.appendChild(headerRow);
+            tempTable.appendChild(thead);
+            
+            // 複製表格內容
+            const tbody = document.createElement('tbody');
+            
+            Array.from(table.querySelectorAll('tbody tr')).forEach(tr => {
+                const newRow = document.createElement('tr');
+                
+                Array.from(tr.querySelectorAll('td')).forEach(td => {
+                    const newTd = document.createElement('td');
+                    newTd.textContent = td.textContent;
+                    newTd.style.border = '1px solid #ddd';
+                    newTd.style.padding = '8px';
+                    newRow.appendChild(newTd);
+                });
+                
+                tbody.appendChild(newRow);
+            });
+            
+            tempTable.appendChild(tbody);
+            tempDiv.appendChild(tempTable);
+            document.body.appendChild(tempDiv);
+            
+            // 選擇並複製表格
+            const range = document.createRange();
+            range.selectNode(tempTable);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    alert('完整表格（包含表頭）已複製到剪貼簿，可直接貼到Excel中');
+                } else {
+                    alert('複製失敗，請手動選擇表格內容後複製');
+                }
+            } catch (err) {
+                alert('複製失敗，請手動選擇表格內容後複製');
+            }
+            
+            // 清理
+            window.getSelection().removeAllRanges();
+            document.body.removeChild(tempDiv);
+        }
+
+        // 複製Excel表格數據到剪貼簿（不包含表頭）
+        function copyExcelDataWithoutHeaders() {
+            const table = document.getElementById('excelTable');
+            
+            // 創建一個臨時的div來存放要複製的內容
+            const tempDiv = document.createElement('div');
+            tempDiv.style.position = 'absolute';
+            tempDiv.style.left = '-9999px';
+            
+            // 創建一個臨時表格來保持格式
+            const tempTable = document.createElement('table');
+            tempTable.style.borderCollapse = 'collapse';
+            tempTable.style.border = '1px solid #ddd';
+            
+            // 只複製表格內容（不包含表頭）
+            const tbody = document.createElement('tbody');
+            
+            Array.from(table.querySelectorAll('tbody tr')).forEach(tr => {
+                const newRow = document.createElement('tr');
+                
+                Array.from(tr.querySelectorAll('td')).forEach(td => {
+                    const newTd = document.createElement('td');
+                    newTd.textContent = td.textContent;
+                    newTd.style.border = '1px solid #ddd';
+                    newTd.style.padding = '8px';
+                    newRow.appendChild(newTd);
+                });
+                
+                tbody.appendChild(newRow);
+            });
+            
+            tempTable.appendChild(tbody);
+            tempDiv.appendChild(tempTable);
+            document.body.appendChild(tempDiv);
+            
+            // 選擇並複製表格
+            const range = document.createRange();
+            range.selectNode(tempTable);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    alert('表格內容（不包含表頭）已複製到剪貼簿，可直接貼到Excel中');
+                } else {
+                    alert('複製失敗，請手動選擇表格內容後複製');
+                }
+            } catch (err) {
+                alert('複製失敗，請手動選擇表格內容後複製');
+            }
+            
+            // 清理
+            window.getSelection().removeAllRanges();
+            document.body.removeChild(tempDiv);
+        }
+
+        // 下載Excel數據為CSV文件
+        function downloadExcelData() {
+            const table = document.getElementById('excelTable');
+            const rows = table.querySelectorAll('tr');
+            let csvContent = '';
+            
+            rows.forEach(row => {
+                const rowData = [];
+                const cells = row.querySelectorAll('th, td');
+                
+                cells.forEach(cell => {
+                    // 處理特殊字符
+                    let cellText = cell.textContent.trim();
+                    if (cellText.includes(',')) {
+                        cellText = `"${cellText}"`;
+                    }
+                    rowData.push(cellText);
+                });
+                
+                csvContent += rowData.join(',') + '\n';
+            });
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const studentName = document.getElementById('studentName').value || '學員';
+            const monthRange = getMonthRangeFromSessions();
+            
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', `${studentName}-${monthRange}-課程資料.csv`);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // 保存學費單為圖片
+        function saveInvoiceAsImage() {
+            const invoiceContainer = document.getElementById('formalInvoiceContainer');
+            
+            // 顯示處理中的提示
+            const notification = document.getElementById('imageSaveNotification');
+            notification.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 正在生成學費單圖片...';
+            notification.style.display = 'block';
+            
+            // 使用html2canvas將學費單轉換為圖片
+            html2canvas(invoiceContainer, {
+                scale: 2, // 提高圖片質量
+                logging: false,
+                useCORS: true,
+                allowTaint: true
+            }).then(canvas => {
+                // 將canvas轉換為圖片URL
+                const image = canvas.toDataURL('image/png');
+                
+                // 創建下載鏈接
+                const link = document.createElement('a');
+                const studentName = document.getElementById('studentName').value || '學員';
+                const monthRange = getMonthRangeFromSessions();
+                
+                link.download = `${studentName}-${monthRange}-乒乓球課程學費單.png`;
+                link.href = image;
+                
+                // 模擬點擊下載鏈接
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // 更新通知消息
+                notification.innerHTML = '<i class="fas fa-check-circle"></i> 學費單圖片已保存到您的設備！';
+                
+                // 3秒後自動隱藏通知
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+            }).catch(err => {
+                console.error('保存圖片時出錯:', err);
+                notification.innerHTML = '<i class="fas fa-exclamation-circle"></i> 保存圖片時出錯，請重試';
+                
+                // 3秒後自動隱藏通知
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+            });
+        }
+
+        // 安全防護措施
+        function showSecurityMessage() {
+            // 檢查是否嘗試保存頁面
+            document.addEventListener('keydown', function(e) {
+                // 檢查是否按下Ctrl+S或Cmd+S
+                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                    e.preventDefault();
+                    document.getElementById('securityOverlay').style.display = 'flex';
+                }
+            });
+            
+            // 防止右鍵菜單
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                document.getElementById('securityOverlay').style.display = 'flex';
+            });
+            
+            // 防止查看源代碼
+            document.addEventListener('keydown', function(e) {
+                // 檢查是否按下Ctrl+U或Cmd+Option+U
+                if ((e.ctrlKey && e.key === 'u') || (e.metaKey && e.altKey && e.key === 'u')) {
+                    e.preventDefault();
+                    document.getElementById('securityOverlay').style.display = 'flex';
+                }
+            });
+            
+            // 防止開發者工具
+            setInterval(function() {
+                const before = new Date().getTime();
+                debugger;
+                const after = new Date().getTime();
+                if (after - before > 100) {
+                    document.getElementById('securityOverlay').style.display = 'flex';
+                }
+            }, 1000);
+        }
+        
+        function hideSecurityMessage() {
+            document.getElementById('securityOverlay').style.display = 'none';
+        }
+
+        // 初始化頁面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化時間選項
+            updateTimeOptions('start');
+            updateTimeOptions('end');
+            
+            // 設置默認日期為今天
+            const now = new Date();
+            document.getElementById('sessionDate').value = now.toISOString().split('T')[0];
+            document.getElementById('unrecordedAbsentDate').value = now.toISOString().split('T')[0];
+            
+            // 設置開單日期和時間
+            updateInvoiceDateTime();
+            
+            // 初始化課程計數
+            updateSessionCount();
+            
+            // 隱藏調整部分直到計算學費
+            document.getElementById('adjustmentSection').style.display = 'block'; // 修改為始終顯示
+            document.getElementById('paymentGuideBtn').style.display = 'none';
+            document.getElementById('calculationConfirmation').style.display = 'none';
+            document.getElementById('courseAddedMessage').style.display = 'none';
+            document.getElementById('adjustmentAddedMessage').style.display = 'none';
+            document.getElementById('invoiceGeneratedMessage').style.display = 'none';
+            document.getElementById('absentReasonSection').style.display = 'none';
+            document.getElementById('confirmDialog').style.display = 'none';
+            document.getElementById('imageSaveNotification').style.display = 'none';
+            
+            // 啟用安全防護
+            showSecurityMessage();
+        });
+    </script>
+</body>
+</html>
