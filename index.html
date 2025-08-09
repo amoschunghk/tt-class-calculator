@@ -2462,20 +2462,23 @@
             };
             
             sessions.forEach(session => {
-                // 只計算正常課程（補堂和請假都不計費）
-                if (session.status !== 'normal') return;
+                // 只計算正常課程和補堂（補堂不計費）
+                if (session.status === 'absent') return;
                 
                 const config = courseConfig[session.type];
                 
                 if (config.calculateByHour) {
                     // 私人課程和專才教練課程按小時計算
                     summary[session.type].hours += session.duration;
-                    summary[session.type].fee += session.duration * config.rate;
+                    // 補堂不計費
+                    if (session.status !== 'makeup') {
+                        summary[session.type].fee += session.duration * config.rate;
+                    }
                 } else {
                     // 小組班和比賽班課程按堂數計算
                     const classes = session.duration / config.durationPerClass;
                     const roundedClasses = Math.ceil(classes);
-                    const fee = roundedClasses * config.rate;
+                    fee = roundedClasses * config.rate;
                     summary[session.type].fee += fee;
                     summary[session.type].count += roundedClasses;
                 }
