@@ -2469,22 +2469,18 @@
                 
                 if (config.calculateByHour) {
                     // 私人課程和專才教練課程按小時計算
-                    // 只計算正常課程的時數（補堂不計時數）
+                    summary[session.type].hours += session.duration;
+                    // 補堂不計費
                     if (session.status !== 'makeup') {
-                        summary[session.type].hours += session.duration;
                         summary[session.type].fee += session.duration * config.rate;
                     }
                 } else {
                     // 小組班和比賽班課程按堂數計算
                     const classes = session.duration / config.durationPerClass;
                     const roundedClasses = Math.ceil(classes);
-                    
-                    // 只計算正常課程的堂數（補堂不計堂數）
-                    if (session.status !== 'makeup') {
-                        summary[session.type].count += roundedClasses;
-                        const fee = roundedClasses * config.rate;
-                        summary[session.type].fee += fee;
-                    }
+                    fee = roundedClasses * config.rate;
+                    summary[session.type].fee += fee;
+                    summary[session.type].count += roundedClasses;
                 }
             });
             
@@ -3508,7 +3504,7 @@
                 <div class="payment-methods">
                     <div class="payment-method">
                         <h3>PayMe 付款</h3>
-                        <img src="https://i.meee.com.tw/NIgdVic.jpeg" alt="PayMe QR Code">
+                        <img src="https://github.com/amoschunghk/tt-class-calculator/blob/ea408da2525b03c73ed83eb784fab3b634bf76e7/IMG_0273.jpeg" alt="PayMe QR Code">
                         <div class="payment-steps" style="counter-reset: step;">
                             <div class="payment-step">打開PayMe應用程式</div>
                             <div class="payment-step">掃描上方QR Code</div>
